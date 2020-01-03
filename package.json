@@ -4,7 +4,9 @@
   "description": "Responsive page",
   "main": "index.js",
   "scripts": {
-    "compile:sass": "node-sass sass/main.scss dist/style.css"
+    "compile:sass": "node-sass sass/main.scss dist/style.css -w",
+    "compile:ts": "tsc -w",
+    "start": "npm-run-all -p compile:sass compile:ts" 
   },
   "repository": {
     "type": "git",
@@ -17,6 +19,7 @@
   },
   "homepage": "https://github.com/Diongarman/Hometree#readme",
   "devDependencies": {
-    "node-sass": "^4.13.0"
+    "node-sass": "^4.13.0",
+    "npm-run-all": "^4.1.5"
   }
 }
