@@ -1,53 +1,38 @@
-.btn {
+.star-btn {
     &,
     &:link,
     &:visited {
         text-transform: uppercase;
         text-decoration: none;
-        padding: 1rem 2rem;
+        padding: .5rem .5rem;
         display: inline-block;
         border-radius: 10rem;
         transition: all .2s;
         position: relative;
         font-size: $small-font-size;
+        transform: translateY(3px);
 
         //Change for the <button> element
         border: none;
         cursor: pointer;
     }
-    
-    &:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 1rem 2rem rgba($color-black,.2);
 
-        &::after {
-            transform: scaleX(1.4) scaleY(1.6);
-            opacity: 0;
-        }
-    }
-    
-    &:active,
-    &:focus {
-        outline: none;
-        transform: translateY(-1px);
-        box-shadow: 0 .5rem 1rem rgba($color-black,.2);
-    }
     
     &--yellow {
-        background-color: $color-secondary-light;
+        background-color: $color-grey-dark-3;
         color: $color-black;
 
         &::after {
-            background-color: $color-secondary-light;
+            background-color: $color-grey-dark-3;
         }
     }
 
     &--green {
-        background-color: $color-secondary-light;
+        background-color: $color-grey-dark-3;
         color: $color-white;
 
         &::after {
-            background-color: $color-secondary-light;
+            background-color: $color-grey-dark-3;
         }
     }
     
@@ -64,9 +49,6 @@
         transition: all .4s;
     }
     
-    &--animated {
-        animation: moveInBottom .5s ease-out .75s;
-        animation-fill-mode: backwards;
-    }
+
 }
 
