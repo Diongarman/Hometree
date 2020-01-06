@@ -208,4 +208,12 @@ td {
 
 .grey-text {
   color: #777;
-  line-height: 200%; }
+  line-height: 250%; }
+
+.title-section {
+  line-height: 250%; }
+
+.title-section-icons {
+  padding-top: 2%; }
+  .title-section-icons img {
+    padding-right: 5%; }
