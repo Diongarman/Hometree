@@ -55,7 +55,7 @@ body {
 
 .row {
   max-width: 114rem;
-  margin: 0 auto; }
+  margin: 1rem auto; }
   .row:not(:last-child) {
     margin-bottom: 2rem; }
     @media only screen and (max-width: 56.25em) {
@@ -106,16 +106,17 @@ tr td:last-child {
   border-right: none !important; }
 
 th {
-  color: white;
   width: 50%;
-  border: 1px solid white;
+  border: 1px solid #777;
   padding: 5px; }
 
 td {
-  border: 1px solid white;
-  border: 1px solid white;
+  color: #cbcbcb;
+  font-weight: bold;
+  border: 1px solid #777;
   padding: 5px;
-  text-align: center; }
+  text-align: center;
+  height: 4rem; }
 
 .btn, .btn:link, .btn:visited {
   text-transform: uppercase;
@@ -214,7 +215,8 @@ td {
   line-height: 250%; }
 
 .title-section-icons img {
-  padding-right: 5%; }
+  padding-right: 5%;
+  padding-top: 2%; }
 
 .title {
   font-size: 5rem;
@@ -224,3 +226,12 @@ td {
   font-size: 2.5rem;
   padding-bottom: 2rem;
   color: #dddddd; }
+
+.header {
+  float: right; }
+  .header img {
+    padding-top: 0;
+    padding-bottom: 1rem; }
+
+.bottom-border {
+  border-bottom: 1px solid #777; }

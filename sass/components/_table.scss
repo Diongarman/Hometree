@@ -17,19 +17,20 @@ table {
 }
 
 th {
-    color:white;
     width:50%; 
-    border: 1px solid white;
+    border: 1px solid $color-grey-dark;
     padding:5px;
 
 }  
 
 
   td {
-    border: 1px solid white;
-    border: 1px solid white;
+    color: lighten($color-grey-dark, 33%);
+    font-weight: bold;
+    border: 1px solid $color-grey-dark;
     padding:5px;
     text-align: center;
+    height: 4rem;
 }
 
 
