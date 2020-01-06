@@ -4,9 +4,19 @@
 
 
 .title-section-icons {
-    padding-top: 2%;
 
     img {
         padding-right: 5%;
     }
+}
+
+.title {
+    font-size: 5rem;
+    padding-bottom: 3rem;
+}
+
+.sub-title {
+    font-size: 2.5rem;
+    padding-bottom: 2rem;
+    color: lighten($color-grey-dark, 40%);
 }
