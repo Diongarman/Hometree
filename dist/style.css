@@ -117,9 +117,6 @@ td {
   padding: 5px;
   text-align: center; }
 
-.right-td {
-  border-right: none; }
-
 .btn, .btn:link, .btn:visited {
   text-transform: uppercase;
   text-decoration: none;
@@ -208,3 +205,7 @@ td {
   left: 0;
   z-index: -1;
   transition: all .4s; }
+
+.grey-text {
+  color: #777;
+  line-height: 200%; }
