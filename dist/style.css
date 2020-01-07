@@ -119,6 +119,10 @@ td {
   td.selected {
     background-color: #333; }
 
+.table-img {
+  position: absolute;
+  padding-left: 1rem; }
+
 .btn, .btn:link, .btn:visited {
   text-transform: uppercase;
   text-decoration: none;
