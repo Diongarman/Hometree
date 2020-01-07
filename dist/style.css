@@ -111,12 +111,13 @@ th {
   padding: 5px; }
 
 td {
-  color: #cbcbcb;
   font-weight: bold;
   border: 1px solid #777;
   padding: 5px;
   text-align: center;
   height: 4rem; }
+  td.selected {
+    background-color: #333; }
 
 .btn, .btn:link, .btn:visited {
   text-transform: uppercase;

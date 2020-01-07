@@ -25,12 +25,31 @@ th {
 
 
   td {
-    color: lighten($color-grey-dark, 33%);
     font-weight: bold;
     border: 1px solid $color-grey-dark;
     padding:5px;
     text-align: center;
     height: 4rem;
+    &.selected {
+        background-color: $color-grey-dark-3;
+    }
+    // .unstyled-button {
+    //     border: none;
+    //     padding: 0;
+    //     background: none;
+    //     background-color: $color-black;
+    //     color: lighten($color-grey-dark, 33%);
+
+
+
+    //     &:focus {
+    //         outline:0;
+    //     }
+
+
+    //   }
+
+
 }
 
 
