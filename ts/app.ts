@@ -5,8 +5,11 @@ class App {
     selectedTableCell: Element|null = null;
     
     constructor() {
-        let elements = document.querySelectorAll<HTMLElement>("td");
-        document.getElementById("addToBasket")?.addEventListener("click", () => this.addToBasket());
+        
+
+        let elements = document.querySelectorAll<HTMLTableDataCellElement>("td");
+        let button = <HTMLDivElement>document.getElementById("addToBasket");
+        button.addEventListener("click", () => this.addToBasket());
         for (let i = 0; i < elements.length; i++) {
             elements[i].addEventListener("click", (e: MouseEvent) => this.onTableClick(e));
         }
@@ -16,21 +19,21 @@ class App {
     private onTableClick(e: Event):void {
 
         let td = (<Element>e.target);
-        let button: null|HTMLElement = document.getElementById("addToBasket");
+        let button = <HTMLDivElement>document.getElementById("addToBasket");
 
 
         //No td selected
         if (this.selectedTableCell === null) {
             this.selectedTableCell = td;
             td.classList.add('selected');
-            button?.style.setProperty('pointer-events','auto');
+            button.style.setProperty('pointer-events','auto');
 
         } 
         //same td selected ergo deselect
         else if (td === this.selectedTableCell) {
             td.classList.remove('selected');
             this.selectedTableCell = null;
-            button?.style.setProperty('pointer-events','none');
+            button.style.setProperty('pointer-events','none');
 
         } 
         //New cell selected
@@ -39,7 +42,7 @@ class App {
 
             this.selectedTableCell = td;
             td.classList.add('selected');
-            button?.style.setProperty('pointer-events','auto');
+            button.style.setProperty('pointer-events','auto');
 
             
         }
@@ -48,7 +51,8 @@ class App {
     }
 
     private addToBasket() {
-        let img = this.selectedTableCell?.lastElementChild as HTMLImageElement;
+        let td = this.selectedTableCell;
+        let img = td?.lastElementChild as HTMLImageElement;
         img.src = "/assets/tick.svg";
 
         

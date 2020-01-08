@@ -238,6 +238,15 @@ td {
   .header img {
     padding-top: 0;
     padding-bottom: 1rem; }
+  .header .basket-icon-container {
+    position: relative;
+    text-align: center;
+    color: black; }
+    .header .basket-icon-container .centered {
+      position: absolute;
+      top: 35%;
+      left: 50%;
+      transform: translate(-50%, -50%); }
 
 .bottom-border {
   border-bottom: 1px solid #777; }
