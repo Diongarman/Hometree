@@ -3,34 +3,42 @@ console.log('App Running');
 var App = /** @class */ (function () {
     function App() {
         var _this = this;
+        var _a;
         this.selectedTableCell = null;
         var elements = document.querySelectorAll("td");
+        (_a = document.getElementById("addToBasket")) === null || _a === void 0 ? void 0 : _a.addEventListener("click", function () { return _this.addToBasket(); });
         for (var i = 0; i < elements.length; i++) {
             elements[i].addEventListener("click", function (e) { return _this.onTableClick(e); });
         }
     }
     App.prototype.onTableClick = function (e) {
+        var _a, _b, _c;
         var td = e.target;
+        var button = document.getElementById("addToBasket");
         //No td selected
         if (this.selectedTableCell === null) {
             this.selectedTableCell = td;
             td.classList.add('selected');
+            (_a = button) === null || _a === void 0 ? void 0 : _a.style.setProperty('pointer-events', 'auto');
         }
         //same td selected ergo deselect
         else if (td === this.selectedTableCell) {
             td.classList.remove('selected');
             this.selectedTableCell = null;
+            (_b = button) === null || _b === void 0 ? void 0 : _b.style.setProperty('pointer-events', 'none');
         }
         //New cell selected
         else {
             this.selectedTableCell.classList.remove('selected');
             this.selectedTableCell = td;
             td.classList.add('selected');
+            (_c = button) === null || _c === void 0 ? void 0 : _c.style.setProperty('pointer-events', 'auto');
         }
-        //Reuse
     };
-    App.prototype.handleChange = function (event) {
-        console.log(event.style.set);
+    App.prototype.addToBasket = function () {
+        var _a;
+        var img = (_a = this.selectedTableCell) === null || _a === void 0 ? void 0 : _a.lastElementChild;
+        img.src = "/assets/tick.svg";
     };
     return App;
 }());

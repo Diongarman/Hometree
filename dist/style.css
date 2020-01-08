@@ -124,6 +124,7 @@ td {
   padding-left: 1rem; }
 
 .btn, .btn:link, .btn:visited {
+  pointer-events: none;
   text-transform: uppercase;
   text-decoration: none;
   padding: 1rem 2rem;
