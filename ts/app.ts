@@ -2,7 +2,7 @@ console.log('App Running');
 
 class App {
 
-    tableToggle: boolean = false;
+    selectedTableCell: Element|null = null;
     constructor() {
         let elements = document.querySelectorAll<HTMLElement>("td");
         for (let i = 0; i < elements.length; i++) {
@@ -12,23 +12,42 @@ class App {
         
     }
     private onTableClick(e: Event):void {
-        this.tableToggle = !this.tableToggle;
+
         let td = (<Element>e.target);
-        let img = td.lastElementChild as HTMLImageElement;
 
-        if (this.tableToggle) {
-
+        //No td selected
+        if (this.selectedTableCell === null) {
+            this.selectedTableCell = td;
             td.classList.add('selected');
-            img.src = "/assets/tick.svg";
 
-        } else {
-
+        } 
+        //same td selected ergo deselect
+        else if (td === this.selectedTableCell) {
             td.classList.remove('selected');
-            img.src = "";
+            this.selectedTableCell = null;
+        } 
+        //New cell selected
+        else {
+            this.selectedTableCell.classList.remove('selected');
 
+            this.selectedTableCell = td;
+            td.classList.add('selected');
+
+
+            
+
+
+            
         }
 
+
+
+        //Reuse
+
+
     }
+
+
 
 
     private handleChange(event:any):void {
