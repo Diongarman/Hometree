@@ -250,3 +250,21 @@ td {
 
 .bottom-border {
   border-bottom: 1px solid #777; }
+
+.container .img-container {
+  position: relative;
+  text-align: center;
+  color: white; }
+  .container .img-container .img-text-centered {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-35%, -50%);
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0.3s linear,opacity 0.3s linear; }
+  .container .img-container:hover {
+    filter: brightness(50%); }
+    .container .img-container:hover .img-text-centered {
+      visibility: visible;
+      opacity: 1; }

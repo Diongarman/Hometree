@@ -6,16 +6,12 @@ class App {
     basketSize : number = 0;
     
     constructor() {
-        
-
         let elements = document.querySelectorAll<HTMLTableDataCellElement>("td");
         let button = <HTMLDivElement>document.getElementById("addToBasket");
         button.addEventListener("click", () => this.addToBasket());
         for (let i = 0; i < elements.length; i++) {
             elements[i].addEventListener("click", (e: MouseEvent) => this.onTableClick(e));
-        }
-
-        
+        }     
     }
 
 
@@ -29,8 +25,6 @@ class App {
         if (!img.src.includes('tick.svg')) {
             button.style.setProperty('pointer-events','auto');
         }
-
-
     }
     
     private onTableClick(e: Event):void {
