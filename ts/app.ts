@@ -2,7 +2,8 @@ console.log('App Running');
 
 class App {
 
-    selectedTableCell: Element|null = null;
+    selectedTableCell : [Element|null, false] = [null, false];
+    basketSize : number = 0;
     
     constructor() {
         
@@ -16,33 +17,49 @@ class App {
 
         
     }
-    private onTableClick(e: Event):void {
 
-        let td = (<Element>e.target);
+
+    private isInBasket():void {
+        let td = this.selectedTableCell[0];
+        let img = td?.lastElementChild as HTMLImageElement;
         let button = <HTMLDivElement>document.getElementById("addToBasket");
+
+        button.style.setProperty('pointer-events','none');
+        //if cell has previously been selected then state will reflect that 
+        if (!img.src.includes('tick.svg')) {
+            button.style.setProperty('pointer-events','auto');
+        }
+
+
+    }
+    
+    private onTableClick(e: Event):void {
+        //e is passed in from selected td cell
+        let td = (<Element>e.target);
 
 
         //No td selected
-        if (this.selectedTableCell === null) {
-            this.selectedTableCell = td;
+        if (this.selectedTableCell[0] === null) {
+            this.selectedTableCell[0] = td;
             td.classList.add('selected');
-            button.style.setProperty('pointer-events','auto');
+            this.isInBasket()
 
         } 
         //same td selected ergo deselect
-        else if (td === this.selectedTableCell) {
+        else if (td === this.selectedTableCell[0]) {
             td.classList.remove('selected');
-            this.selectedTableCell = null;
-            button.style.setProperty('pointer-events','none');
+            this.selectedTableCell[0] = null;
+            this.isInBasket()
 
         } 
         //New cell selected
         else {
-            this.selectedTableCell.classList.remove('selected');
+            this.selectedTableCell[0].classList.remove('selected');
+            //update state to new selected cell
+            this.selectedTableCell[0] = td;
 
-            this.selectedTableCell = td;
             td.classList.add('selected');
-            button.style.setProperty('pointer-events','auto');
+            this.isInBasket()
 
             
         }
@@ -50,12 +67,21 @@ class App {
 
     }
 
-    private addToBasket() {
-        let td = this.selectedTableCell;
+    private addToBasket():void {
+        let td = this.selectedTableCell[0];
         let img = td?.lastElementChild as HTMLImageElement;
-        img.src = "/assets/tick.svg";
+        let basketQty = <HTMLDivElement>document.getElementById('qty-centered');
 
-        
+
+        if (!img.src.includes('tick.svg')) {
+            img.src = "/assets/tick.svg";    
+            this.basketSize++
+            basketQty.innerText = this.basketSize.toString();
+            this.isInBasket()
+
+        } 
+        //document.getElementById("addToBasket")?.style.setProperty('pointer-events','none');
+              
         
     }
 

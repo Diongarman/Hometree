@@ -242,7 +242,7 @@ td {
     position: relative;
     text-align: center;
     color: black; }
-    .header .basket-icon-container .centered {
+    .header .basket-icon-container #qty-centered {
       position: absolute;
       top: 35%;
       left: 50%;

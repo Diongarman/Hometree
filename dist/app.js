@@ -2,7 +2,8 @@
 console.log('App Running');
 class App {
     constructor() {
-        this.selectedTableCell = null;
+        this.selectedTableCell = [null, false];
+        this.basketSize = 0;
         let elements = document.querySelectorAll("td");
         let button = document.getElementById("addToBasket");
         button.addEventListener("click", () => this.addToBasket());
@@ -10,34 +11,53 @@ class App {
             elements[i].addEventListener("click", (e) => this.onTableClick(e));
         }
     }
-    onTableClick(e) {
-        let td = e.target;
+    isInBasket() {
+        var _a;
+        let td = this.selectedTableCell[0];
+        let img = (_a = td) === null || _a === void 0 ? void 0 : _a.lastElementChild;
         let button = document.getElementById("addToBasket");
-        //No td selected
-        if (this.selectedTableCell === null) {
-            this.selectedTableCell = td;
-            td.classList.add('selected');
+        button.style.setProperty('pointer-events', 'none');
+        //if cell has previously been selected then state will reflect that 
+        if (!img.src.includes('tick.svg')) {
             button.style.setProperty('pointer-events', 'auto');
         }
+    }
+    onTableClick(e) {
+        //e is passed in from selected td cell
+        let td = e.target;
+        //No td selected
+        if (this.selectedTableCell[0] === null) {
+            this.selectedTableCell[0] = td;
+            td.classList.add('selected');
+            this.isInBasket();
+        }
         //same td selected ergo deselect
-        else if (td === this.selectedTableCell) {
+        else if (td === this.selectedTableCell[0]) {
             td.classList.remove('selected');
-            this.selectedTableCell = null;
-            button.style.setProperty('pointer-events', 'none');
+            this.selectedTableCell[0] = null;
+            this.isInBasket();
         }
         //New cell selected
         else {
-            this.selectedTableCell.classList.remove('selected');
-            this.selectedTableCell = td;
+            this.selectedTableCell[0].classList.remove('selected');
+            //update state to new selected cell
+            this.selectedTableCell[0] = td;
             td.classList.add('selected');
-            button.style.setProperty('pointer-events', 'auto');
+            this.isInBasket();
         }
     }
     addToBasket() {
         var _a;
-        let td = this.selectedTableCell;
+        let td = this.selectedTableCell[0];
         let img = (_a = td) === null || _a === void 0 ? void 0 : _a.lastElementChild;
-        img.src = "/assets/tick.svg";
+        let basketQty = document.getElementById('qty-centered');
+        if (!img.src.includes('tick.svg')) {
+            img.src = "/assets/tick.svg";
+            this.basketSize++;
+            basketQty.innerText = this.basketSize.toString();
+            this.isInBasket();
+        }
+        //document.getElementById("addToBasket")?.style.setProperty('pointer-events','none');
     }
 }
 ;
