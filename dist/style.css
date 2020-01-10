@@ -251,11 +251,11 @@ td {
 .bottom-border {
   border-bottom: 1px solid #777; }
 
-.container .img-container {
+.img-container {
   position: relative;
   text-align: center;
   color: white; }
-  .container .img-container .img-text-centered {
+  .img-container .img-text-centered {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -263,10 +263,10 @@ td {
     visibility: hidden;
     opacity: 0;
     transition: visibility 0.3s linear,opacity 0.3s linear; }
-  .container .img-container .product-image {
+  .img-container .product-image {
     transition: filter 0.3s linear; }
-  .container .img-container:hover .product-image {
+  .img-container:hover .product-image {
     filter: brightness(50%); }
-  .container .img-container:hover .img-text-centered {
+  .img-container:hover .img-text-centered {
     visibility: visible;
     opacity: 1; }
