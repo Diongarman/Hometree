@@ -263,8 +263,10 @@ td {
     visibility: hidden;
     opacity: 0;
     transition: visibility 0.3s linear,opacity 0.3s linear; }
-  .container .img-container:hover {
+  .container .img-container .product-image {
+    transition: filter 0.3s linear; }
+  .container .img-container:hover .product-image {
     filter: brightness(50%); }
-    .container .img-container:hover .img-text-centered {
-      visibility: visible;
-      opacity: 1; }
+  .container .img-container:hover .img-text-centered {
+    visibility: visible;
+    opacity: 1; }

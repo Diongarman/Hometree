@@ -5,27 +5,35 @@
         position: relative;
         text-align: center;
         color: white;
+
         .img-text-centered {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-35%, -50%);
-
             visibility:hidden;
             opacity:0;
             transition:visibility 0.3s linear,opacity 0.3s linear;
   
 
         }
+        
+        .product-image {
+            transition: filter 0.3s linear;
+        }
 
         &:hover {
-            filter: brightness(50%);
 
+            .product-image {
+                filter: brightness(50%);
+            }
+            
             .img-text-centered {
                     visibility:visible;
-                    opacity:1;
+                    opacity:1;                    
             }
         }
+
     }
     
 }

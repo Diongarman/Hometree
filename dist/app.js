@@ -64,30 +64,22 @@ class App {
 new App();
 /*
 
-                                +++++++++++++
-                                + RESOURCES +
-                                +++++++++++++
+                                                                    +++++++++++++
+                                                                    + RESOURCES +
+                                                                    +++++++++++++
 
 
-                                ############
-                                # SPECIFIC #
-                                ############
-DomTokenList: https://developer.mozilla.org/en-US/docs/Web/API/DOMTokenList/add
-Getting Class Name from MouseEvent: https://stackoverflow.com/questions/43638516/get-class-name-of-element-from-mouseevent-target
-Clean DOM Queries in TS: https://medium.com/@mindplay/clean-dom-queries-in-typescript-c10f362d14fc
-
-
-//https://developer.mozilla.org/en-US/docs/Web/API/CSSStyleDeclaration/setProperty
-//https://www.w3schools.com/jsref/obj_cssstyledeclaration.asp
-//https://www.w3schools.com/howto/howto_js_toggle_class.asp
-//https://stackoverflow.com/questions/49226309/what-are-the-proper-typescript-types-for-addeventlistener-mousemove-and-its-eve
+                                                                    ############
+                                                                    # SPECIFIC #
+                                                                    ############
 
 
 
 
-                                ###########
-                                # GENERAL #
-                                ###########
+
+                                                                    ###########
+                                                                    # GENERAL #
+                                                                    ###########
 
 https://www.typescriptlang.org/docs/handbook/classes.html
 
