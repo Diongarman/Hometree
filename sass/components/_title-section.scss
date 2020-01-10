@@ -8,8 +8,25 @@
     img {
         padding-right: 5%;
         padding-top: 2%;
+        animation-duration: .5s;
+
+        
+        animation-timing-function: ease;
+
+        &:hover{
+            animation-name: bounce-3;
+        }
     }
+
+    
 }
+
+@keyframes bounce-3 {
+    0%   { transform: translateY(0); }
+    100% { transform: translateY(-10px); }
+}
+
+
 
 .title {
     font-size: 5rem;
