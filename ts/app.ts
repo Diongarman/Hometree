@@ -1,36 +1,106 @@
-console.log('App Running');
+
 
 class App {
 
     selectedTableCell : Element|null = null;
     basketSize : number = 0;
-    favourite: Element|null = null;
+    favouriteIndex : number = (sessionStorage.faveIndex, 10) ? (sessionStorage.faveIndex, 10):-1;
     
-    
+    //Logic below initialises State of object
     constructor() {
         let elements = document.querySelectorAll<HTMLTableDataCellElement>("td");
         let button = <HTMLDivElement>document.getElementById("addToBasket");
-        // let faveButton = <HTMLDivElement>document.getElementById("addToFave");
+        let faveButton = <HTMLDivElement>document.getElementById("addToFave");
 
+        console.log(elements)
 
-        // if (this.favourite === null) {
+        this.setUpClickHandlers(elements, (e: MouseEvent) => {
+            this.onTableClick(e)
+        });
+        this.enumerateTdEls(elements);
 
-        //     faveButton.addEventListener("click", () => this.addFavourite());
-
-    
         
-        // }
-
         button.addEventListener("click", () => this.addToBasket());
-        
+        //enable save fave button only if there is no pre-existing fave --> update to be able to toggleFave later though
+        //toggle fave button will only work when on the current favourite td or if there is no fave
+        if (this.favouriteIndex < 0) {
+            faveButton.addEventListener("click", () => this.saveFavourite());
+        }
 
-        for (let i = 0; i < elements.length; i++) {
-            elements[i].addEventListener("click", (e: MouseEvent) => this.onTableClick(e));
-        }     
+    }
+
+    //constructor helper
+    public setUpClickHandlers(el: NodeListOf<HTMLTableDataCellElement>, handler: any):void {
+        for (let i = 0; i < el.length; i++) {
+
+            el[i].addEventListener('click', handler)
+
+            el[i].children[0].addEventListener("click",(e: Event) => {
+                e.stopPropagation()
+            })
+
+
+            if (i === parseInt(sessionStorage.faveIndex, 10)) {
+
+                this.switchOnTickStyle(el[i])
+
+
+            }
+
+        }
+    }
+    //constructor helper
+    private enumerateTdEls(el: NodeListOf<HTMLTableDataCellElement>):void {
+            //Enumerate td cells so can refer to them in this objects state.
+            //reason to refer to them is so that we can remember favourited td
+            for (let i = 0; i < el.length; i++) {
+
+                el[i].title = i.toString();
+    
+            }
+    }
+
+    private switchOnTickStyle(td: Element|null) {
+
+        let img = td?.lastElementChild as HTMLImageElement;
+
+        //img.onclick = e.stopPropagation()
+
+        if (!img.src.includes('tick.svg')) {
+            img.src = "/assets/tick.svg";    
+            this.incrementBasketCount()
+            this.toggleAddToBasketButton()
+        }   
     }
 
 
-    private isInBasket():void {
+    private incrementBasketCount() {
+        let basketQty = <HTMLDivElement>document.getElementById('qty-centered');
+        this.basketSize++
+        basketQty.innerText = this.basketSize.toString();
+
+
+    }
+
+    private saveFavourite():void {
+
+        let td = this.selectedTableCell;
+        let tdIndex: string|number|undefined = td?.attributes[0].value
+
+
+        if (typeof tdIndex === "string") {
+            tdIndex = parseInt(tdIndex, 10)
+            this.favouriteIndex = tdIndex;
+
+            sessionStorage.faveIndex = tdIndex
+        }
+
+        this.switchOnTickStyle(td)
+
+    }
+
+
+    private toggleAddToBasketButton():void {
         let td = this.selectedTableCell;
         let img = td?.lastElementChild as HTMLImageElement;
         let button = <HTMLDivElement>document.getElementById("addToBasket");
@@ -49,22 +119,25 @@ class App {
 
     
     private onTableClick(e: Event):void {
+ 
+        
         //e is passed in from selected td cell
         let td = (<Element>e.target);
+        console.log(td)
 
 
         //No td selected
         if (this.selectedTableCell === null) {
             this.selectedTableCell = td;
             td.classList.add('selected');
-            this.isInBasket()
+            this.toggleAddToBasketButton()
 
         } 
         //same td selected ergo deselect
         else if (td === this.selectedTableCell) {
             td.classList.remove('selected');
             this.selectedTableCell = null;
-            this.isInBasket()
+            this.toggleAddToBasketButton()
 
         } 
         //New cell selected
@@ -74,7 +147,7 @@ class App {
             this.selectedTableCell = td;
 
             td.classList.add('selected');
-            this.isInBasket()
+            this.toggleAddToBasketButton()
 
             
         }
@@ -84,6 +157,7 @@ class App {
 
     private addToBasket():void {
         let td = this.selectedTableCell;
+
         let img = td?.lastElementChild as HTMLImageElement;
         let basketQty = <HTMLDivElement>document.getElementById('qty-centered');
 
@@ -92,27 +166,12 @@ class App {
             img.src = "/assets/tick.svg";    
             this.basketSize++
             basketQty.innerText = this.basketSize.toString();
-            this.isInBasket()
+            this.toggleAddToBasketButton()
 
         } 
                  
-        
     }
 
-
-
-    private addFavourite():void {
-        
-
-
-    }
-
-    private saveFavourite():void {
-
-        // var fav = {'element':this.favourite};
-        // sessionStorage.setItem('favourite', JSON.stringify(fav));
-        // console.log(JSON.parse(sessionStorage.favourite).element);
-    }
 
 
 };
