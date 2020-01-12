@@ -65,7 +65,8 @@ class App {
         let img = td?.lastElementChild as HTMLImageElement;
         img.src = "/assets/tick.svg";    
         this.incrementBasketCount()
-        this.toggleAddToBasketButton()   
+        this.toggleAddToBasketButton()
+        this.toggleFaveButton()   
     }
 
     private removeFromBasket(tdIndex: number):void {
@@ -97,15 +98,9 @@ class App {
         let td = this.selectedTableCell;
         let tdIndex: string|number|undefined = td?.attributes[0].value;
 
-        let faveButton = <HTMLDivElement>document.getElementById("addToFave");
-        faveButton.style.setProperty('pointer-events','auto');
 
 
-        
-
-
-
-
+    
         if (typeof tdIndex === "string") {
 
             
@@ -113,9 +108,7 @@ class App {
 
             //save old fave
             let oldTdIndex = this.favouriteIndex
-            //save fave to object and browser
-            this.favouriteIndex = tdIndex;
-            sessionStorage.faveIndex = tdIndex;
+
 
 
             if (this.favouriteIndex === -1) {
@@ -142,34 +135,11 @@ class App {
                 this.addToBasket(td)
 
             }
-            
-            // else {
-
-            //     console.log('case 4')
-            //     // console.log(oldTdIndex)
-            //     // console.log(td)
-            //     // console.log(this.favouriteIndex)
-                
-            //     this.removeFromBasket(oldTdIndex)
-                
-            //     this.addToBasket(td)
-
-                
-            // }
-
-
-
-
-            
+            //save fave to object and browser
+            this.favouriteIndex = tdIndex;
+            sessionStorage.faveIndex = tdIndex;
 
         }
-
-
-
-        
-        
-
-        
 
     }
 
@@ -190,6 +160,29 @@ class App {
         if (!img.src.includes('tick.svg')) {
             button.style.setProperty('pointer-events','auto');
         }
+
+ 
+    }
+    private toggleFaveButton():void {
+
+        let faveButton = <HTMLDivElement>document.getElementById("addToFave");
+
+        let td = this.selectedTableCell;
+        let img = td?.lastElementChild as HTMLImageElement;
+
+ 
+        
+
+        faveButton.style.setProperty('pointer-events','none');
+        //if cell has previously been selected then state will reflect that 
+
+        if (img === undefined) {
+            return;
+        }
+        if (!img.src.includes('tick.svg')) {
+            faveButton.style.setProperty('pointer-events','auto');
+        } 
+        
     }
 
 
@@ -204,6 +197,7 @@ class App {
             this.selectedTableCell = td;
             td.classList.add('selected');
             this.toggleAddToBasketButton()
+            this.toggleFaveButton()
 
         } 
         //same td selected ergo deselect
@@ -211,6 +205,7 @@ class App {
             td.classList.remove('selected');
             this.selectedTableCell = null;
             this.toggleAddToBasketButton()
+            this.toggleFaveButton()
 
         } 
         //New cell selected
@@ -219,7 +214,8 @@ class App {
             //update state to new selected cell
             this.selectedTableCell = td;
             td.classList.add('selected');
-            this.toggleAddToBasketButton()    
+            this.toggleAddToBasketButton()
+            this.toggleFaveButton()   
         }
 
 

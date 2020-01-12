@@ -50,6 +50,7 @@ class App {
         img.src = "/assets/tick.svg";
         this.incrementBasketCount();
         this.toggleAddToBasketButton();
+        this.toggleFaveButton();
     }
     removeFromBasket(tdIndex) {
         var _a;
@@ -74,15 +75,10 @@ class App {
         var _a;
         let td = this.selectedTableCell;
         let tdIndex = (_a = td) === null || _a === void 0 ? void 0 : _a.attributes[0].value;
-        let faveButton = document.getElementById("addToFave");
-        faveButton.style.setProperty('pointer-events', 'auto');
         if (typeof tdIndex === "string") {
             tdIndex = parseInt(tdIndex, 10);
             //save old fave
             let oldTdIndex = this.favouriteIndex;
-            //save fave to object and browser
-            this.favouriteIndex = tdIndex;
-            sessionStorage.faveIndex = tdIndex;
             if (this.favouriteIndex === -1) {
                 console.log('case 1');
                 this.addToBasket(td);
@@ -100,14 +96,9 @@ class App {
                 this.removeFromBasket(oldTdIndex);
                 this.addToBasket(td);
             }
-            // else {
-            //     console.log('case 4')
-            //     // console.log(oldTdIndex)
-            //     // console.log(td)
-            //     // console.log(this.favouriteIndex)
-            //     this.removeFromBasket(oldTdIndex)
-            //     this.addToBasket(td)
-            // }
+            //save fave to object and browser
+            this.favouriteIndex = tdIndex;
+            sessionStorage.faveIndex = tdIndex;
         }
     }
     //UI logic
@@ -125,6 +116,20 @@ class App {
             button.style.setProperty('pointer-events', 'auto');
         }
     }
+    toggleFaveButton() {
+        var _a;
+        let faveButton = document.getElementById("addToFave");
+        let td = this.selectedTableCell;
+        let img = (_a = td) === null || _a === void 0 ? void 0 : _a.lastElementChild;
+        faveButton.style.setProperty('pointer-events', 'none');
+        //if cell has previously been selected then state will reflect that 
+        if (img === undefined) {
+            return;
+        }
+        if (!img.src.includes('tick.svg')) {
+            faveButton.style.setProperty('pointer-events', 'auto');
+        }
+    }
     onTdClick(e) {
         //e is passed in from selected td cell
         let td = e.target;
@@ -133,12 +138,14 @@ class App {
             this.selectedTableCell = td;
             td.classList.add('selected');
             this.toggleAddToBasketButton();
+            this.toggleFaveButton();
         }
         //same td selected ergo deselect
         else if (td === this.selectedTableCell) {
             td.classList.remove('selected');
             this.selectedTableCell = null;
             this.toggleAddToBasketButton();
+            this.toggleFaveButton();
         }
         //New cell selected
         else {
@@ -147,6 +154,7 @@ class App {
             this.selectedTableCell = td;
             td.classList.add('selected');
             this.toggleAddToBasketButton();
+            this.toggleFaveButton();
         }
     }
 }
