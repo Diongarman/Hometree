@@ -4,7 +4,7 @@ class App {
 
     selectedTableCell : Element|null = null;
     basketSize : number = 0;
-    favouriteIndex : number = (sessionStorage.faveIndex, 10) ? (sessionStorage.faveIndex, 10):-1;
+    favouriteIndex : number = parseInt(sessionStorage.faveIndex, 10) ? parseInt(sessionStorage.faveIndex, 10):-1;
     
     //Logic below initialises State of object
     constructor() {
@@ -12,7 +12,6 @@ class App {
         let button = <HTMLDivElement>document.getElementById("addToBasket");
         let faveButton = <HTMLDivElement>document.getElementById("addToFave");
 
-        console.log(elements)
 
         this.setUpClickHandlers(elements, (e: MouseEvent) => {
             this.onTableClick(e)
@@ -21,6 +20,7 @@ class App {
 
         
         button.addEventListener("click", () => this.addToBasket());
+        //faveButton.addEventListener("click", () => this.saveFavourite());
         //enable save fave button only if there is no pre-existing fave --> update to be able to toggleFave later though
         //toggle fave button will only work when on the current favourite td or if there is no fave
         if (this.favouriteIndex < 0) {
@@ -33,16 +33,22 @@ class App {
     public setUpClickHandlers(el: NodeListOf<HTMLTableDataCellElement>, handler: any):void {
         for (let i = 0; i < el.length; i++) {
 
-            el[i].addEventListener('click', handler)
+            el[i].addEventListener('click', handler);
 
             el[i].children[0].addEventListener("click",(e: Event) => {
-                e.stopPropagation()
+                e.stopPropagation();
             })
 
+            //add all this favourite state logic elsewhere
 
+            let faveButton = <HTMLDivElement>document.getElementById("addToFave");
             if (i === parseInt(sessionStorage.faveIndex, 10)) {
 
+                faveButton.addEventListener("click", () => this.saveFavourite());
+
                 this.switchOnTickStyle(el[i])
+
+
 
 
             }
@@ -60,18 +66,7 @@ class App {
             }
     }
 
-    private switchOnTickStyle(td: Element|null) {
 
-        let img = td?.lastElementChild as HTMLImageElement;
-
-        //img.onclick = e.stopPropagation()
-
-        if (!img.src.includes('tick.svg')) {
-            img.src = "/assets/tick.svg";    
-            this.incrementBasketCount()
-            this.toggleAddToBasketButton()
-        }   
-    }
 
 
     private incrementBasketCount() {
@@ -82,20 +77,61 @@ class App {
 
     }
 
+    private decrementBasketCount() {
+        let basketQty = <HTMLDivElement>document.getElementById('qty-centered');
+        this.basketSize--
+        basketQty.innerText = this.basketSize.toString();
+
+
+    }
+
+
+    private switchOnTickStyle(td: Element|null) {
+
+        let img = td?.lastElementChild as HTMLImageElement;
+
+        if (!img.src.includes('tick.svg')) {
+            img.src = "/assets/tick.svg";    
+            this.incrementBasketCount()
+            this.toggleAddToBasketButton()
+        }   
+    }
+
+    private switchOffTickStyle(tdIndex: number):void {
+        let td = document.querySelectorAll<HTMLTableDataCellElement>("td")[tdIndex]
+
+        let img = td?.lastElementChild as HTMLImageElement;
+
+        img.src = "";  
+        this.decrementBasketCount()
+
+    }
+
     private saveFavourite():void {
 
         let td = this.selectedTableCell;
         let tdIndex: string|number|undefined = td?.attributes[0].value
 
+        console.log(this.favouriteIndex)
+        if (this.favouriteIndex > -1) {
+            let oldTdIndex = this.favouriteIndex
+            this.switchOffTickStyle(oldTdIndex)
+
+        }
 
         if (typeof tdIndex === "string") {
             tdIndex = parseInt(tdIndex, 10)
             this.favouriteIndex = tdIndex;
 
             sessionStorage.faveIndex = tdIndex
+
         }
 
         this.switchOnTickStyle(td)
+
+    }
+
+    private removeFavourite() {
 
     }
 
@@ -123,8 +159,6 @@ class App {
         
         //e is passed in from selected td cell
         let td = (<Element>e.target);
-        console.log(td)
-
 
         //No td selected
         if (this.selectedTableCell === null) {
