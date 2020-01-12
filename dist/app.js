@@ -8,17 +8,17 @@ class App {
         let elements = document.querySelectorAll("td");
         let button = document.getElementById("addToBasket");
         let faveButton = document.getElementById("addToFave");
+        //order matters here, because...
+        this.enumerateTdEls(elements);
+        //...handlers' logic is based on tds being enumerated first
         this.setUpClickHandlers(elements, (e) => {
             this.onTableClick(e);
         });
-        this.enumerateTdEls(elements);
-        button.addEventListener("click", () => this.addToBasket());
-        //faveButton.addEventListener("click", () => this.saveFavourite());
-        //enable save fave button only if there is no pre-existing fave --> update to be able to toggleFave later though
+        this.styleCurrFavOnLoad(elements);
+        button.addEventListener("click", () => this.addToBasket(this.selectedTableCell));
+        //update to be able to toggleFave later though
         //toggle fave button will only work when on the current favourite td or if there is no fave
-        if (this.favouriteIndex < 0) {
-            faveButton.addEventListener("click", () => this.saveFavourite());
-        }
+        faveButton.addEventListener("click", () => this.saveFavourite());
     }
     //constructor helper
     setUpClickHandlers(el, handler) {
@@ -27,12 +27,6 @@ class App {
             el[i].children[0].addEventListener("click", (e) => {
                 e.stopPropagation();
             });
-            //add all this favourite state logic elsewhere
-            let faveButton = document.getElementById("addToFave");
-            if (i === parseInt(sessionStorage.faveIndex, 10)) {
-                faveButton.addEventListener("click", () => this.saveFavourite());
-                this.switchOnTickStyle(el[i]);
-            }
         }
     }
     //constructor helper
@@ -43,50 +37,58 @@ class App {
             el[i].title = i.toString();
         }
     }
-    incrementBasketCount() {
-        let basketQty = document.getElementById('qty-centered');
-        this.basketSize++;
-        basketQty.innerText = this.basketSize.toString();
-    }
-    decrementBasketCount() {
-        let basketQty = document.getElementById('qty-centered');
-        this.basketSize--;
-        basketQty.innerText = this.basketSize.toString();
-    }
-    switchOnTickStyle(td) {
-        var _a;
-        let img = (_a = td) === null || _a === void 0 ? void 0 : _a.lastElementChild;
-        if (!img.src.includes('tick.svg')) {
-            img.src = "/assets/tick.svg";
-            this.incrementBasketCount();
-            this.toggleAddToBasketButton();
+    //constructor helper
+    styleCurrFavOnLoad(el) {
+        for (let i = 0; i < el.length; i++) {
+            if (i === parseInt(sessionStorage.faveIndex, 10)) {
+                this.addToBasket(el[i]);
+                el[i].click();
+            }
         }
     }
-    switchOffTickStyle(tdIndex) {
+    addToBasket(td) {
+        var _a;
+        let img = (_a = td) === null || _a === void 0 ? void 0 : _a.lastElementChild;
+        img.src = "/assets/tick.svg";
+        this.incrementBasketCount();
+        this.toggleAddToBasketButton();
+    }
+    removeFromBasket(tdIndex) {
         var _a;
         let td = document.querySelectorAll("td")[tdIndex];
         let img = (_a = td) === null || _a === void 0 ? void 0 : _a.lastElementChild;
         img.src = "";
         this.decrementBasketCount();
     }
+    //helper
+    incrementBasketCount() {
+        let basketQty = document.getElementById('qty-centered');
+        this.basketSize++;
+        basketQty.innerText = this.basketSize.toString();
+    }
+    //helper
+    decrementBasketCount() {
+        let basketQty = document.getElementById('qty-centered');
+        this.basketSize--;
+        basketQty.innerText = this.basketSize.toString();
+    }
     saveFavourite() {
         var _a;
         let td = this.selectedTableCell;
         let tdIndex = (_a = td) === null || _a === void 0 ? void 0 : _a.attributes[0].value;
-        console.log(this.favouriteIndex);
-        if (this.favouriteIndex > -1) {
+        //if an old favourite exists and some td is selected
+        if ((this.favouriteIndex > -1) && (this.selectedTableCell !== null)) {
             let oldTdIndex = this.favouriteIndex;
-            this.switchOffTickStyle(oldTdIndex);
+            this.removeFromBasket(oldTdIndex);
         }
         if (typeof tdIndex === "string") {
             tdIndex = parseInt(tdIndex, 10);
             this.favouriteIndex = tdIndex;
             sessionStorage.faveIndex = tdIndex;
         }
-        this.switchOnTickStyle(td);
+        this.addToBasket(td);
     }
-    removeFavourite() {
-    }
+    //UI logic
     toggleAddToBasketButton() {
         var _a;
         let td = this.selectedTableCell;
@@ -122,18 +124,6 @@ class App {
             //update state to new selected cell
             this.selectedTableCell = td;
             td.classList.add('selected');
-            this.toggleAddToBasketButton();
-        }
-    }
-    addToBasket() {
-        var _a;
-        let td = this.selectedTableCell;
-        let img = (_a = td) === null || _a === void 0 ? void 0 : _a.lastElementChild;
-        let basketQty = document.getElementById('qty-centered');
-        if (!img.src.includes('tick.svg')) {
-            img.src = "/assets/tick.svg";
-            this.basketSize++;
-            basketQty.innerText = this.basketSize.toString();
             this.toggleAddToBasketButton();
         }
     }

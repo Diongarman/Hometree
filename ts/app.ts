@@ -12,20 +12,20 @@ class App {
         let button = <HTMLDivElement>document.getElementById("addToBasket");
         let faveButton = <HTMLDivElement>document.getElementById("addToFave");
 
-
+        //order matters here, because...
+        this.enumerateTdEls(elements);
+        //...handlers' logic is based on tds being enumerated first
         this.setUpClickHandlers(elements, (e: MouseEvent) => {
             this.onTableClick(e)
         });
-        this.enumerateTdEls(elements);
-
-        
-        button.addEventListener("click", () => this.addToBasket());
-        //faveButton.addEventListener("click", () => this.saveFavourite());
-        //enable save fave button only if there is no pre-existing fave --> update to be able to toggleFave later though
+        this.styleCurrFavOnLoad(elements);
+        button.addEventListener("click", () => this.addToBasket(this.selectedTableCell));
+        //update to be able to toggleFave later though
         //toggle fave button will only work when on the current favourite td or if there is no fave
-        if (this.favouriteIndex < 0) {
-            faveButton.addEventListener("click", () => this.saveFavourite());
-        }
+        faveButton.addEventListener("click", () => this.saveFavourite());
+   
+        
+
 
     }
 
@@ -38,21 +38,6 @@ class App {
             el[i].children[0].addEventListener("click",(e: Event) => {
                 e.stopPropagation();
             })
-
-            //add all this favourite state logic elsewhere
-
-            let faveButton = <HTMLDivElement>document.getElementById("addToFave");
-            if (i === parseInt(sessionStorage.faveIndex, 10)) {
-
-                faveButton.addEventListener("click", () => this.saveFavourite());
-
-                this.switchOnTickStyle(el[i])
-
-
-
-
-            }
-
         }
     }
     //constructor helper
@@ -60,15 +45,38 @@ class App {
             //Enumerate td cells so can refer to them in this objects state.
             //reason to refer to them is so that we can remember favourited td
             for (let i = 0; i < el.length; i++) {
-
                 el[i].title = i.toString();
-    
             }
     }
+    //constructor helper
+    private styleCurrFavOnLoad(el: NodeListOf<HTMLTableDataCellElement>):void {
+        for (let i = 0; i < el.length; i++) {
 
+            if (i === parseInt(sessionStorage.faveIndex, 10)) {
 
+                this.addToBasket(el[i])
+                el[i].click()
 
+            }
 
+        }
+    }
+
+    private addToBasket(td: Element|null) {
+        let img = td?.lastElementChild as HTMLImageElement;
+        img.src = "/assets/tick.svg";    
+        this.incrementBasketCount()
+        this.toggleAddToBasketButton()   
+    }
+
+    private removeFromBasket(tdIndex: number):void {
+        let td = document.querySelectorAll<HTMLTableDataCellElement>("td")[tdIndex]
+        let img = td?.lastElementChild as HTMLImageElement;
+        img.src = "";  
+        this.decrementBasketCount();
+    }
+
+    //helper
     private incrementBasketCount() {
         let basketQty = <HTMLDivElement>document.getElementById('qty-centered');
         this.basketSize++
@@ -76,7 +84,7 @@ class App {
 
 
     }
-
+    //helper
     private decrementBasketCount() {
         let basketQty = <HTMLDivElement>document.getElementById('qty-centered');
         this.basketSize--
@@ -86,36 +94,14 @@ class App {
     }
 
 
-    private switchOnTickStyle(td: Element|null) {
-
-        let img = td?.lastElementChild as HTMLImageElement;
-
-        if (!img.src.includes('tick.svg')) {
-            img.src = "/assets/tick.svg";    
-            this.incrementBasketCount()
-            this.toggleAddToBasketButton()
-        }   
-    }
-
-    private switchOffTickStyle(tdIndex: number):void {
-        let td = document.querySelectorAll<HTMLTableDataCellElement>("td")[tdIndex]
-
-        let img = td?.lastElementChild as HTMLImageElement;
-
-        img.src = "";  
-        this.decrementBasketCount()
-
-    }
-
     private saveFavourite():void {
-
         let td = this.selectedTableCell;
-        let tdIndex: string|number|undefined = td?.attributes[0].value
+        let tdIndex: string|number|undefined = td?.attributes[0].value;
 
-        console.log(this.favouriteIndex)
-        if (this.favouriteIndex > -1) {
+        //if an old favourite exists and some td is selected
+        if ((this.favouriteIndex > -1) && (this.selectedTableCell !== null)) {
             let oldTdIndex = this.favouriteIndex
-            this.switchOffTickStyle(oldTdIndex)
+            this.removeFromBasket(oldTdIndex)
 
         }
 
@@ -127,15 +113,13 @@ class App {
 
         }
 
-        this.switchOnTickStyle(td)
-
-    }
-
-    private removeFavourite() {
+        this.addToBasket(td)
 
     }
 
 
+
+    //UI logic
     private toggleAddToBasketButton():void {
         let td = this.selectedTableCell;
         let img = td?.lastElementChild as HTMLImageElement;
@@ -156,7 +140,6 @@ class App {
     
     private onTableClick(e: Event):void {
  
-        
         //e is passed in from selected td cell
         let td = (<Element>e.target);
 
@@ -179,33 +162,12 @@ class App {
             this.selectedTableCell.classList.remove('selected');
             //update state to new selected cell
             this.selectedTableCell = td;
-
             td.classList.add('selected');
-            this.toggleAddToBasketButton()
-
-            
+            this.toggleAddToBasketButton()    
         }
 
 
     }
-
-    private addToBasket():void {
-        let td = this.selectedTableCell;
-
-        let img = td?.lastElementChild as HTMLImageElement;
-        let basketQty = <HTMLDivElement>document.getElementById('qty-centered');
-
-
-        if (!img.src.includes('tick.svg')) {
-            img.src = "/assets/tick.svg";    
-            this.basketSize++
-            basketQty.innerText = this.basketSize.toString();
-            this.toggleAddToBasketButton()
-
-        } 
-                 
-    }
-
 
 
 };
