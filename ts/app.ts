@@ -112,7 +112,6 @@ class App {
 
 
             if (this.favouriteIndex === -1) {
-                console.log('case 1')
                 
                 this.addToBasket(td)
 
@@ -121,14 +120,11 @@ class App {
 
             }else if ((this.favouriteIndex > -1) && !(this.favouriteIndex === tdIndex)) {
                 
-                console.log('case 2')
-                console.log(oldTdIndex)
-                console.log(td)
+
                 this.removeFromBasket(oldTdIndex)
                 this.addToBasket(td)
     
             } else if (this.favouriteIndex === tdIndex) {
-                console.log('case 3')
                 // this.decrementBasketCount()
                 this.removeFromBasket(oldTdIndex)
                 
