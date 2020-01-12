@@ -16,12 +16,11 @@ class App {
         this.enumerateTdEls(elements);
         //...handlers' logic is based on tds being enumerated first
         this.setUpClickHandlers(elements, (e: MouseEvent) => {
-            this.onTableClick(e)
+            this.onTdClick(e)
         });
         this.styleCurrFavOnLoad(elements);
         button.addEventListener("click", () => this.addToBasket(this.selectedTableCell));
-        //update to be able to toggleFave later though
-        //toggle fave button will only work when on the current favourite td or if there is no fave
+
         faveButton.addEventListener("click", () => this.saveFavourite());
    
         
@@ -98,22 +97,79 @@ class App {
         let td = this.selectedTableCell;
         let tdIndex: string|number|undefined = td?.attributes[0].value;
 
-        //if an old favourite exists and some td is selected
-        if ((this.favouriteIndex > -1) && (this.selectedTableCell !== null)) {
-            let oldTdIndex = this.favouriteIndex
-            this.removeFromBasket(oldTdIndex)
+        let faveButton = <HTMLDivElement>document.getElementById("addToFave");
+        faveButton.style.setProperty('pointer-events','auto');
 
-        }
+
+        
+
+
+
 
         if (typeof tdIndex === "string") {
-            tdIndex = parseInt(tdIndex, 10)
-            this.favouriteIndex = tdIndex;
 
-            sessionStorage.faveIndex = tdIndex
+            
+            tdIndex = parseInt(tdIndex, 10)
+
+            //save old fave
+            let oldTdIndex = this.favouriteIndex
+            //save fave to object and browser
+            this.favouriteIndex = tdIndex;
+            sessionStorage.faveIndex = tdIndex;
+
+
+            if (this.favouriteIndex === -1) {
+                console.log('case 1')
+                
+                this.addToBasket(td)
+
+
+
+
+            }else if ((this.favouriteIndex > -1) && !(this.favouriteIndex === tdIndex)) {
+                
+                console.log('case 2')
+                console.log(oldTdIndex)
+                console.log(td)
+                this.removeFromBasket(oldTdIndex)
+                this.addToBasket(td)
+    
+            } else if (this.favouriteIndex === tdIndex) {
+                console.log('case 3')
+                // this.decrementBasketCount()
+                this.removeFromBasket(oldTdIndex)
+                
+                this.addToBasket(td)
+
+            }
+            
+            // else {
+
+            //     console.log('case 4')
+            //     // console.log(oldTdIndex)
+            //     // console.log(td)
+            //     // console.log(this.favouriteIndex)
+                
+            //     this.removeFromBasket(oldTdIndex)
+                
+            //     this.addToBasket(td)
+
+                
+            // }
+
+
+
+
+            
 
         }
 
-        this.addToBasket(td)
+
+
+        
+        
+
+        
 
     }
 
@@ -138,7 +194,7 @@ class App {
 
 
     
-    private onTableClick(e: Event):void {
+    private onTdClick(e: Event):void {
  
         //e is passed in from selected td cell
         let td = (<Element>e.target);
@@ -176,25 +232,3 @@ new App();
 
 
 
-/*
-
-                                                                    +++++++++++++
-                                                                    + RESOURCES +
-                                                                    +++++++++++++
-
-
-                                                                    ############
-                                                                    # SPECIFIC #
-                                                                    ############
-
-
-
-
-
-                                                                    ###########
-                                                                    # GENERAL #
-                                                                    ###########
-
-https://www.typescriptlang.org/docs/handbook/classes.html
-
-*/

@@ -12,12 +12,10 @@ class App {
         this.enumerateTdEls(elements);
         //...handlers' logic is based on tds being enumerated first
         this.setUpClickHandlers(elements, (e) => {
-            this.onTableClick(e);
+            this.onTdClick(e);
         });
         this.styleCurrFavOnLoad(elements);
         button.addEventListener("click", () => this.addToBasket(this.selectedTableCell));
-        //update to be able to toggleFave later though
-        //toggle fave button will only work when on the current favourite td or if there is no fave
         faveButton.addEventListener("click", () => this.saveFavourite());
     }
     //constructor helper
@@ -76,17 +74,41 @@ class App {
         var _a;
         let td = this.selectedTableCell;
         let tdIndex = (_a = td) === null || _a === void 0 ? void 0 : _a.attributes[0].value;
-        //if an old favourite exists and some td is selected
-        if ((this.favouriteIndex > -1) && (this.selectedTableCell !== null)) {
-            let oldTdIndex = this.favouriteIndex;
-            this.removeFromBasket(oldTdIndex);
-        }
+        let faveButton = document.getElementById("addToFave");
+        faveButton.style.setProperty('pointer-events', 'auto');
         if (typeof tdIndex === "string") {
             tdIndex = parseInt(tdIndex, 10);
+            //save old fave
+            let oldTdIndex = this.favouriteIndex;
+            //save fave to object and browser
             this.favouriteIndex = tdIndex;
             sessionStorage.faveIndex = tdIndex;
+            if (this.favouriteIndex === -1) {
+                console.log('case 1');
+                this.addToBasket(td);
+            }
+            else if ((this.favouriteIndex > -1) && !(this.favouriteIndex === tdIndex)) {
+                console.log('case 2');
+                console.log(oldTdIndex);
+                console.log(td);
+                this.removeFromBasket(oldTdIndex);
+                this.addToBasket(td);
+            }
+            else if (this.favouriteIndex === tdIndex) {
+                console.log('case 3');
+                // this.decrementBasketCount()
+                this.removeFromBasket(oldTdIndex);
+                this.addToBasket(td);
+            }
+            // else {
+            //     console.log('case 4')
+            //     // console.log(oldTdIndex)
+            //     // console.log(td)
+            //     // console.log(this.favouriteIndex)
+            //     this.removeFromBasket(oldTdIndex)
+            //     this.addToBasket(td)
+            // }
         }
-        this.addToBasket(td);
     }
     //UI logic
     toggleAddToBasketButton() {
@@ -103,7 +125,7 @@ class App {
             button.style.setProperty('pointer-events', 'auto');
         }
     }
-    onTableClick(e) {
+    onTdClick(e) {
         //e is passed in from selected td cell
         let td = e.target;
         //No td selected
@@ -130,25 +152,3 @@ class App {
 }
 ;
 new App();
-/*
-
-                                                                    +++++++++++++
-                                                                    + RESOURCES +
-                                                                    +++++++++++++
-
-
-                                                                    ############
-                                                                    # SPECIFIC #
-                                                                    ############
-
-
-
-
-
-                                                                    ###########
-                                                                    # GENERAL #
-                                                                    ###########
-
-https://www.typescriptlang.org/docs/handbook/classes.html
-
-*/
